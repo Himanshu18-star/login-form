@@ -2,6 +2,8 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Bounce } from "react-toastify";
+import baseURL from "../API/Api";
+import LoginFunc from "../API/Auth";
 
 const LoginForm = () => {
   const [message, setMessage] = useState("");
@@ -11,22 +13,25 @@ const LoginForm = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     //sending login request server
-    axios
-      .post("http://localhost:5000/api/v1/rrcollege/user/login", {
+
+
+
+
+    const data = LoginFunc({
         email: emailRef.current.value,
         password: passwordRef.current.value,
       })
-      .then((res) => {
-        toast(res.data.message);
-        localStorage.setItem("token", res.data.Btoken);
+
+      if(data){
+          toast(res.data.message);
+          localStorage.setItem("token", res.data.Btoken);
         localStorage.setItem("userid",res.data.user.id)
         localStorage.setItem("useremail",res.data.user.email)
         emailRef.current.value = "";
-        passwordRef.current.value = "";
-      })
-      .catch((err) => {
-        toast(err.response.data.message);
-      });
+        passwordRef.current.value = ""; 
+      }else{
+          toast(err.response.data.message);
+      }
   };
 
   return (
